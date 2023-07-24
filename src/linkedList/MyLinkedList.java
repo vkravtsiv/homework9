@@ -3,6 +3,7 @@ package linkedList;
 public class MyLinkedList<T> {
     private Node<T> firstNode;
     private Node<T> lastNode;
+    private int size=0;
     public void add(T value){
         if (firstNode==null){
             firstNode =new Node<>(null,null,value);
@@ -14,6 +15,7 @@ public class MyLinkedList<T> {
             lastNode.setNextNode(node);
             lastNode=node;
         }
+        size++;
             }
     public void remove(int index){
         Node<T> currentNode=firstNode;
@@ -35,21 +37,14 @@ public class MyLinkedList<T> {
             next.setPrevNode(prev);
         }
         currentNode=null;
+        size--;
 //        currentNode.setPrevNode(null);
 //        currentNode.setNextNode(null);
     }
 
 
     public int size(){
-        int result=0;
-//        if (firstNode==null) return result;
-        Node<T> currentNode=firstNode;
-       while (!(currentNode==null)){
-            result++;
-            currentNode=currentNode.getNextNode();
-
-        }
-        return result;
+        return size;
     }
     public void clear(){
         for (Node<T> x = firstNode; x != null; ) {
@@ -60,6 +55,7 @@ public class MyLinkedList<T> {
             x = next;
         }
         firstNode = lastNode = null;
+        size=0;
 
     }
 
@@ -72,6 +68,7 @@ public class MyLinkedList<T> {
         ownLL.add("from");
         ownLL.add("Vasyl");
         ownLL.add("Va");
+        System.out.println("ownLL.size() = " + ownLL.size());
         System.out.println(ownLL.get(1));
         System.out.println("ownLL.size() = " + ownLL.size());
         ownLL.remove(1);

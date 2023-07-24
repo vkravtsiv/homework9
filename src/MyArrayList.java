@@ -1,61 +1,68 @@
 import java.util.Arrays;
 
-public class MyArrayList {
-    private Object[] array;
+public class MyArrayList<T> {
+    private T[] array;
     private int pointer;
+    private int size=0;
+    private int length=5;
 
-    public MyArrayList(int size) {
-        array = new Object[size];
+
+    public MyArrayList() {
+        array = (T[])new Object[length];
         pointer = 0;
+    }
+
+    public MyArrayList(int length) {
+        this();
+        this.length=length;
 //        System.out.println("array.length = " + array.length);
     }
 
-    void add(Object value) {
+    void add(T value) {
         if (pointer == array.length-1) {
-            Object[] temp = new Object[array.length * 2];
+            this.length=array.length * 2;
+            T[] temp = (T[])new Object[array.length * 2];
             for (int i = 0; i < array.length; i++) {
                 temp[i] = array[i];
             }
             array = temp;
         }
         array[pointer++] = value;
+        size++;
+
     }
 
-    Object remove(int index) {
-        Object result=array[index];
+    T remove(int index) {
+        T result=array[index];
         for (int i = index; i < array.length - 1; i++) {
             array[i] = array[i + 1];
         }
         array[array.length - 1] = null;
         System.out.println("Видалений елемнт "+result);
+        size--;
         return result;
 
     }
 
     int clear() {
-        for (int i = 0; i < array.length; i++) {
-            array[i] = null;
-        }
+        array = (T[])new Object[length];
+        size=0;
         return 0;
     }
 
     int size() {
-        int result = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] != null) result++;
-        }
-        return result;
+        return size;
     }
 
-    Object get(int index) {
+    T get(int index) {
 
         return array[index];
     }
     public static void main(String[] args) {
-        MyArrayList arr1=new MyArrayList(5);
-        arr1.add(50);
+        MyArrayList<String> arr1=new MyArrayList<>();
+        arr1.add("50");
         arr1.add("500");
-        arr1.add(true);
+        arr1.add("4000");
         arr1.add("5000");
         arr1.add("50000");
         System.out.println(Arrays.toString(arr1.array));
@@ -70,6 +77,7 @@ public class MyArrayList {
 
         arr1.clear();
         System.out.println(Arrays.toString(arr1.array));
+        System.out.println("arr1.size() = " + arr1.size());
 
     }
 }

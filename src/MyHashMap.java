@@ -7,6 +7,9 @@ public class MyHashMap<K,V> {
             V value;
             Entry<K,V> next;
 
+            public Entry() {
+            }
+
             public Entry(K key, V value, Entry<K, V> next) {
                 this.key = key;
                 this.value = value;
@@ -22,12 +25,17 @@ public class MyHashMap<K,V> {
             }
         }
         private Entry<K,V>[] buckets;
-        private int capacity;
+        private int capacity=15;
+        private int size=0;
+
+    public MyHashMap() {
+        buckets=new Entry[capacity];
+    }
+
 
     public MyHashMap(int capacity) {
+        this();
         this.capacity=capacity;
-        buckets=new Entry[capacity];
-        
     }
     private int hash (K key)
     {
@@ -54,6 +62,7 @@ public class MyHashMap<K,V> {
                 }
             }
         }
+        size++;
     }
     public V get(K key){
         if(null == key) return null;
@@ -90,19 +99,16 @@ public class MyHashMap<K,V> {
                 b =b.next;
             }
         }
+        size--;
         return false;
     }
     public int size(){
-        int result=0;
-        for (Entry<K,V> entry:buckets){
-           if (null!=entry){result++;}
-
-        }
-        return result;
+        return size;
     }
     public void clear(){
         for (int i = 0; i < buckets.length; ++i)
             if (buckets[i]!=null)buckets[i] = null;
+        size=0;
 
     }
 
@@ -116,7 +122,7 @@ public class MyHashMap<K,V> {
 
     public static void main(String[] args) {
 
-        MyHashMap map=new MyHashMap(5);
+        MyHashMap<String,String> map=new MyHashMap<>();
         map.put("Ukraine","Kyiv");
         map.put("Polska","Warshava");
         map.put("Chech","Praha");
@@ -128,11 +134,7 @@ public class MyHashMap<K,V> {
         map.clear();
         System.out.println(map);
         System.out.println("map.size() = " + map.size());
-
-
     }
-
-
 }
 
 

@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
-public class MyQueue {
-    private Object[] array;
+public class MyQueue<T> {
+    private T[] array;
     private int queueLength;
     private int head;
     private int tail;
@@ -9,7 +9,7 @@ public class MyQueue {
 
     public MyQueue(int queueLength) {
         this.queueLength=queueLength;
-        array=new Object[queueLength];
+        array=(T[])new Object[queueLength];
         this.head=-1;
         this.tail=-1;
 
@@ -20,7 +20,7 @@ public class MyQueue {
     boolean isEmpty(){
         return (this.head==-1 && this.tail==-1);
     }
-    void add(Object o){
+    void add(T o){
         if (isFull()){
             System.out.println("Queue is Full");
         } else if (size()==0){
@@ -59,7 +59,7 @@ public class MyQueue {
     }
     int size(){
         int result=0;
-        for (Object o:array){
+        for (T o:array){
             if (o!=null) result++;
         }
         return result;
@@ -78,7 +78,7 @@ public class MyQueue {
     }
 
     public static void main(String[] args) {
-        MyQueue queue=new MyQueue(5);
+        MyQueue<String> queue=new MyQueue<>(5);
         System.out.println("queue.poll() = " + queue.poll());
         queue.add("Maksym");
         System.out.println(queue);

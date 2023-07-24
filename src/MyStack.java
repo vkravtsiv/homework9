@@ -1,21 +1,21 @@
 import java.util.Arrays;
 
-public class MyStack {
+public class MyStack<T> {
 
-    private Object[] stck;
+    private T[] stck;
 
-//    private T stck;
+
 
     private int tos;
 
     MyStack(int size) {
-        stck = new Object[size];
+        stck = (T[]) new Object[size];
         tos = -1;
     }
 
-    void push(Object item) {
+    void push(T item) {
         if (tos == stck.length - 1) {
-            Object[] temp = new Object[stck.length * 2];
+            T[] temp = (T[])new Object[stck.length * 2];
             for (int i = 0; i < stck.length; i++) {
                 temp[i] = stck[i];
             }
@@ -64,10 +64,10 @@ public class MyStack {
         return 0;
     }
     public static void main(String[] args) {
-        MyStack stack1=new MyStack(5);
-        stack1.push(50);
+        MyStack<String> stack1=new MyStack(5);
+        stack1.push("50");
         stack1.push("500");
-        stack1.push(true);
+        stack1.push("true");
         stack1.push("5000");
         stack1.push("50000");
         stack1.push("5");
