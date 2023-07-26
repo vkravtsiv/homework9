@@ -1,139 +1,145 @@
 import java.util.Arrays;
 
-public class MyHashMap<K,V> {
+public class MyHashMap<K, V> {
+    //    HashMap hashMap
+    static class Node<K, V> {
+        K key;
+        V value;
+        Node<K, V> next;
 
-        static class Entry<K,V>{
-            K key;
-            V value;
-            Entry<K,V> next;
-
-            public Entry() {
-            }
-
-            public Entry(K key, V value, Entry<K, V> next) {
-                this.key = key;
-                this.value = value;
-                this.next = next;
-            }
-
-            @Override
-            public String toString() {
-                return "Entry{" +
-                        "key=" + key +
-                        ", value=" + value +
-                        '}';
-            }
+        public Node() {
         }
-        private Entry<K,V>[] buckets;
-        private int capacity=15;
-        private int size=0;
+
+        public Node(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "Entry{" + "key=" + key + ", value=" + value + '}';
+        }
+    }
+
+    private Node<K, V>[] buckets;
+    private int capacity = 5;
+    private int size = 0;
 
     public MyHashMap() {
-        buckets=new Entry[capacity];
+        buckets = new Node[capacity];
     }
 
 
     public MyHashMap(int capacity) {
         this();
-        this.capacity=capacity;
+        this.capacity = capacity;
     }
-    private int hash (K key)
-    {
-        return Math.abs (key.hashCode ())%capacity;
+
+    private int hash(K key) {
+        return Math.abs(key.hashCode()) % capacity;
     }
-    public void put(K key, V value){
-        if(null == key) return; // null keys not allowed
-        int hash = hash(key);
-        Entry<K,V> add = new Entry<K,V> (key,value,null);
-        if(buckets[hash]==null){
-            buckets[hash]=add;
-        }else{
-            Entry<K,V> curr = buckets[hash];
-            while(null !=curr){
-                if(curr.key.equals (key)){
-                    curr.value =value;
-                    return;
-                }else{
-                    if(curr.next == null){
-                        curr.next = add;
-                        return;
-                    }
-                    curr = curr.next;
-                }
+
+    public void put(K key, V value) {
+        int index = hash(key);
+        Node<K, V> node = buckets[index];
+        while (node != null) {
+            if (node.key.equals(key)) {
+                node.value = value;
+                return;
+            }
+            node = node.next;
+        }
+        Node<K, V> newNode = new Node<>(key, value);
+        newNode.next = buckets[index];
+        buckets[index] = newNode;
+        size++;
+        if (size > capacity) {
+            resize();
+        }
+    }
+
+    private void resize() {
+        int newCapacity = capacity * 2;
+        Node<K, V>[] newTable = new Node[newCapacity];
+        for (int i = 0; i < capacity; i++) {
+            Node<K, V> node = buckets[i];
+            while (node != null) {
+                Node<K, V> next = node.next;
+                int index = hash(node.key);
+                node.next = newTable[index];
+                newTable[index] = node;
+                node = next;
             }
         }
-        size++;
+        buckets = newTable;
+        capacity = newCapacity;
     }
-    public V get(K key){
-        if(null == key) return null;
-        int hash = hash(key);
-        Entry<K,V> b = buckets[hash];
-        if(null == b) return null;
-        while(null !=b){
-            if(b.key.equals (key)){
-                return b.value;
-            }else{
-                b=b.next;
+
+    public V get(K key) {
+        if (null == key) return null;
+        int index = hash(key);
+        Node<K, V> node = buckets[index];
+        if (null == node) return null;
+        while (null != node) {
+            if (node.key.equals(key)) {
+                return node.value;
+            } else {
+                node = node.next;
             }
         }
         return null;
     }
-    public boolean remove(K key){
-        if(null == key) return false;
-        int hash = hash(key);
-        Entry<K,V> b = buckets[hash];
-        if(null == b) return false;
-        Entry<K,V> prev = null;
-        while(null !=b){
-            if(b.key.equals (key)){
-                //delete
-                if(prev == null) {  // first node to remove
-                    buckets[hash]=b.next;
-                    return true;
-                }else{
-                    prev.next = b.next;
-                    return true;
+
+    public void remove(K key) {
+        int index = hash(key);
+        Node<K, V> node = buckets[index];
+        Node<K, V> prev = null;
+        while (node != null) {
+            if (node.key.equals(key)) {
+                if (prev == null) {
+                    buckets[index] = node.next;
+                } else {
+                    prev.next = node.next;
                 }
-            }else{
-                prev=b;
-                b =b.next;
+                size--;
+                return;
             }
+            prev = node;
+            node = node.next;
         }
-        size--;
-        return false;
     }
-    public int size(){
+
+    public int size() {
         return size;
     }
-    public void clear(){
-        for (int i = 0; i < buckets.length; ++i)
-            if (buckets[i]!=null)buckets[i] = null;
-        size=0;
 
+    public void clear() {
+//        for (int i = 0; i < buckets.length; ++i)
+//            if (buckets[i] != null) buckets[i] = null;
+        buckets = new Node[capacity];
+        size = 0;
     }
 
     @Override
     public String toString() {
-        return "MyHashMap{" +
-                "buckets=" + Arrays.toString(buckets) +
-                ", capacity=" + capacity +
-                '}';
+        return "MyHashMap{" + "buckets=" + Arrays.toString(buckets) + ", capacity=" + capacity + '}';
     }
 
     public static void main(String[] args) {
 
-        MyHashMap<String,String> map=new MyHashMap<>();
-        map.put("Ukraine","Kyiv");
-        map.put("Polska","Warshava");
-        map.put("Chech","Praha");
+        MyHashMap<String, String> map = new MyHashMap<>();
+        map.put("Ukraine", "Kyiv");
+        map.put("Polska", "Warshava");
+        map.put("Chech", "Praha");
         System.out.println("map.get(\"Chech\") = " + map.get("Chech"));
-        map.put("Slovakia","Bratislava");
+        map.put("Slovakia", "Bratislava");
         System.out.println(map);
         map.remove("Polska");
         System.out.println(map);
         map.clear();
         System.out.println(map);
         System.out.println("map.size() = " + map.size());
+        System.out.println(map);
     }
 }
 

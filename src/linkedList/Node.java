@@ -34,4 +34,11 @@ public class Node<T> {
     public void setValue(T value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                value +
+                '}';
+    }
 }
