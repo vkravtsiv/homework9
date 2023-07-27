@@ -2,14 +2,14 @@ import java.util.Arrays;
 
 public class MyArrayList<T> {
     private T[] array;
-    private int pointer;
+//    private int pointer;
     private int size = 0;
     private int length = 5;
 
 
     public MyArrayList() {
         array = (T[]) new Object[length];
-        pointer = 0;
+        size = 0;
     }
 
     public MyArrayList(int length) {
@@ -24,7 +24,7 @@ public class MyArrayList<T> {
     }
 
     void add(T value) {
-        if (pointer == array.length - 1) {
+        if (size == array.length - 1) {
             this.length = array.length * 2;
             T[] temp = (T[]) new Object[array.length * 2];
             for (int i = 0; i < array.length; i++) {
@@ -32,13 +32,13 @@ public class MyArrayList<T> {
             }
             array = temp;
         }
-        array[pointer++] = value;
-        size++;
+        array[size++] = value;
+//        size++;
 
     }
 
     void add(int index, T value) {
-        if (pointer == array.length - 1) {
+        if (size == array.length - 1) {
             this.length = array.length * 2;
             T[] temp = (T[]) new Object[array.length * 2];
             for (int i = 0; i < array.length; i++) {
@@ -46,13 +46,12 @@ public class MyArrayList<T> {
             }
             array = temp;
         }
-
-        for (int i = size - 1; i > -1; i--) {
-            array[i + 1] = array[i];
-        }
-        array[0] = value;
         size++;
 
+        for (int i = size - 2; i >= index; i--) {
+            array[i + 1] = array[i];
+        }
+        array[index] = value;
     }
 
     T remove(int index) {
@@ -70,10 +69,10 @@ public class MyArrayList<T> {
 
     }
 
-    int clear() {
-        array = (T[]) new Object[0];
+    void clear() {
+        array = (T[]) new Object[length];
         size = 0;
-        return 0;
+
     }
 
     int size() {
@@ -100,22 +99,24 @@ public class MyArrayList<T> {
 
     public static void main(String[] args) {
         MyArrayList<String> arr1 = new MyArrayList<>();
-        for (int i = 0; i <2<<2 ; i++) {
-           arr1.add(Integer.toString(i));
+        for (int i = 0; i < 2 << 2; i++) {
+            arr1.add(Integer.toString(i));
         }
         arr1.add("50");
         arr1.add("500");
         arr1.add("4000");
         arr1.add("5000");
         arr1.add("50000");
-        arr1.add(0, "0");
+        System.out.println(arr1);
+        arr1.add(3, "0");
+        System.out.println(arr1);
         System.out.println("arr1.size() = " + arr1.size());
         System.out.println(arr1);
-        System.out.println("arr1.remove(2)="+arr1.remove(2));
-
-        System.out.println("arr1.get(1)="+arr1.get(1));
-
-        arr1.remove(1);
+        System.out.println("arr1.remove(2)=" + arr1.remove(2));
+        System.out.println(arr1);
+        System.out.println("arr1.get(1)=" + arr1.get(1));
+        System.out.println("arr1.remove(1) = " + arr1.remove(1));
+        System.out.println(arr1);
         arr1.toString();
 //        System.out.println(Arrays.toString(arr1.array));
 
